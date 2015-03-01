@@ -1,7 +1,6 @@
 package com.besttracker.unitracker2;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.database.Cursor;
