@@ -22,9 +22,11 @@ public class ChronometerSubjects extends Activity {
     Calendar endDate;
     DatabaseConection db;
     String subject;
+    TextView totalTime;
+    long subjectId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_chronometer);
 
@@ -39,6 +41,10 @@ public class ChronometerSubjects extends Activity {
         txtVSubject = (TextView)findViewById(R.id.chronometer_subject);
         txtVSubject.setText( subject );
 
+        totalTime = (TextView)findViewById(R.id.chronometer_totalTime);
+        subjectId = db.longSubjectID(subject);
+        totalTime.setText(Float.toString(db.getTotalTime( subjectId )));
+
         // we get the current time and start the chronometer
         startDate = Calendar.getInstance();
         chronometer = (Chronometer)findViewById(R.id.chronometer);
@@ -52,12 +58,12 @@ public class ChronometerSubjects extends Activity {
             public void onClick(View v) {
                 chronometer.stop();
                 endDate = Calendar.getInstance();
+                saveRegisterItem();
             }
         });
     }
 
     private void saveRegisterItem() {
-        long subjectId = db.longSubjectID( subject );
         RegisterItem registerItem = new RegisterItem( startDate, endDate, subjectId );
         db.saveRegister( registerItem );
     }

@@ -64,9 +64,9 @@ public class DatabaseConection  {
         SQLiteDatabase sdb = db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put( REGISTERS_START, item.getStartTime().toString());
-        values.put( REGISTERS_END, item.getEndTime().toString());
-        values.put( REGISTERS_ID, item.getSubjectId());
+        values.put( REGISTERS_START, item.getStartTime().getTimeInMillis());
+        values.put( REGISTERS_END, item.getEndTime().getTimeInMillis());
+        values.put( REGISTERS_SUBJECTID, item.getSubjectId());
 
         long newRowId = sdb.insert(
                 TABLE_REGISTERS,
@@ -75,6 +75,24 @@ public class DatabaseConection  {
         );
 
         return newRowId;
+    }
+
+    public float getTotalTime( long subjectId ) {
+        SQLiteDatabase sdb = db.getReadableDatabase();
+
+        String query = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
+                " FROM " + TABLE_REGISTERS + " WHERE " + REGISTERS_SUBJECTID  + " = ?;";
+
+        String query2 = "SELECT * FROM registers;";
+
+        String[] args = { Long.toString(subjectId) };
+        Cursor cursor = sdb.rawQuery( query, args );
+
+        if ( cursor.moveToFirst() ) {
+            return cursor.getLong(0)/1000;
+        } else {
+            return 0;
+        }
     }
 
     /* If we provide a valid subject name return the index of the subject */
