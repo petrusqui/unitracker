@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -23,6 +24,9 @@ public class ChronometerSubjects extends Activity {
     DatabaseConection db;
     String subject;
     TextView totalTime;
+    TextView monthlyTime;
+    TextView weeklyTime;
+    TextView daylyTime;
     long subjectId;
 
     @Override
@@ -41,9 +45,24 @@ public class ChronometerSubjects extends Activity {
         txtVSubject = (TextView)findViewById(R.id.chronometer_subject);
         txtVSubject.setText( subject );
 
-        totalTime = (TextView)findViewById(R.id.chronometer_totalTime);
         subjectId = db.longSubjectID(subject);
-        totalTime.setText(Float.toString(db.getTotalTime( subjectId )));
+
+        // set the total time
+        totalTime = (TextView)findViewById(R.id.chronometer_totalTime);
+        String sTotalTime = parseLongToTime( db.getTotalTime( subjectId ));
+        totalTime.setText( sTotalTime );
+        // set the monthly time
+        monthlyTime = (TextView)findViewById(R.id.chronometer_mothTime);
+        String sMonthlyTime = parseLongToTime( db.getMonthTime( subjectId ));
+        monthlyTime.setText( sMonthlyTime );
+        // set the weekly time
+        weeklyTime = (TextView)findViewById(R.id.chronometer_weekTime);
+        String sWeeklyTime = parseLongToTime( db.getMonthTime( subjectId ));
+        weeklyTime.setText( sWeeklyTime );
+        // set the dayly time
+        daylyTime = (TextView)findViewById(R.id.chronometer_todayTime);
+        String sDaylyTime = parseLongToTime( db.getMonthTime( subjectId ));
+        daylyTime.setText( sDaylyTime );
 
         // we get the current time and start the chronometer
         startDate = Calendar.getInstance();
@@ -61,6 +80,40 @@ public class ChronometerSubjects extends Activity {
                 saveRegisterItem();
             }
         });
+    }
+
+    private String parseLongToTime( Long time ) {
+        time = time/1000;
+        int minutes = time.intValue()/60;
+        int seconds = time.intValue()%60;
+        int hours = minutes/60;
+        minutes = minutes%60;
+        int days = hours/24;
+        hours = hours%24;
+
+        String s = "";
+        if ( days > 0 ) {
+            s = days + ":";
+        }
+
+        if (hours < 10 )
+            s = s + "0" + hours + ":";
+        else
+            s = hours + ":";
+
+        if (minutes < 10)
+            s = s + "0" + minutes + ":";
+        else
+            s = s + minutes + ":";
+
+        if (seconds < 10)
+            s = s + "0" + seconds;
+        else
+            s = s + seconds;
+
+
+
+        return s;
     }
 
     private void saveRegisterItem() {

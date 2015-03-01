@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.Calendar;
+
 /**
  * Created by psinc_000 on 28/02/2015.
  */
@@ -77,19 +79,128 @@ public class DatabaseConection  {
         return newRowId;
     }
 
-    public float getTotalTime( long subjectId ) {
+    public long getTotalTime( long subjectId ) {
         SQLiteDatabase sdb = db.getReadableDatabase();
 
         String query = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
                 " FROM " + TABLE_REGISTERS + " WHERE " + REGISTERS_SUBJECTID  + " = ?;";
-
-        String query2 = "SELECT * FROM registers;";
-
         String[] args = { Long.toString(subjectId) };
+
         Cursor cursor = sdb.rawQuery( query, args );
 
         if ( cursor.moveToFirst() ) {
-            return cursor.getLong(0)/1000;
+            return cursor.getLong(0);
+        } else {
+            return 0;
+        }
+    }
+
+    public long getMonthTime( long subjectId ) {
+        SQLiteDatabase sdb = db.getReadableDatabase();
+
+        // Set begin to the begin of the month
+        Calendar begin = Calendar.getInstance();
+        begin.set(Calendar.DAY_OF_MONTH, begin.getActualMinimum(Calendar.DAY_OF_MONTH));
+        begin.set(Calendar.HOUR, begin.getActualMinimum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMinimum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMinimum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMinimum(Calendar.MILLISECOND));
+        long msBegin = begin.getTimeInMillis();
+
+        // set end to the end of the month
+        Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_MONTH, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
+        begin.set(Calendar.HOUR, begin.getActualMaximum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMaximum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMaximum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMaximum(Calendar.MILLISECOND));
+        long msEnd = end.getTimeInMillis();
+
+        String query = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
+                " FROM " + TABLE_REGISTERS +
+                " WHERE (" + REGISTERS_SUBJECTID  + " = ? AND " +
+                REGISTERS_START + " >= ? AND " +
+                REGISTERS_END + " <= ?);";
+
+        String query2 = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
+                " FROM " + TABLE_REGISTERS + " WHERE " + REGISTERS_SUBJECTID  + " = ? AND " +
+                REGISTERS_START + " >= ?;";
+        String[] args = { Long.toString(subjectId), Long.toString(msBegin), Long.toString(msEnd) };
+        String[] args2 = { Long.toString(subjectId), Long.toString(msBegin) };
+        Cursor cursor = sdb.rawQuery( query, args );
+
+        if ( cursor.moveToFirst() ) {
+            return cursor.getLong(0);
+        } else {
+            return 0;
+        }
+    }
+
+    public long getWeekTime( long subjectId ) {
+        SQLiteDatabase sdb = db.getReadableDatabase();
+
+        // Set begin to the begin of the week
+        Calendar begin = Calendar.getInstance();
+        begin.set(Calendar.DAY_OF_WEEK, begin.getActualMinimum(Calendar.DAY_OF_WEEK));
+        begin.set(Calendar.HOUR, begin.getActualMinimum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMinimum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMinimum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMinimum(Calendar.MILLISECOND));
+        long msBegin = begin.getTimeInMillis();
+
+        // set end to the end of the week
+        Calendar end = Calendar.getInstance();
+        end.set(Calendar.DAY_OF_WEEK, begin.getActualMaximum(Calendar.DAY_OF_WEEK));
+        begin.set(Calendar.HOUR, begin.getActualMaximum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMaximum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMaximum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMaximum(Calendar.MILLISECOND));
+        long msEnd = end.getTimeInMillis();
+
+        String query = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
+                " FROM " + TABLE_REGISTERS +
+                " WHERE (" + REGISTERS_SUBJECTID  + " = ? AND " +
+                REGISTERS_START + " >= ? AND " +
+                REGISTERS_END + " <= ?);";;
+        String[] args = { Long.toString(subjectId), Long.toString(msBegin), Long.toString(msEnd) };
+        Cursor cursor = sdb.rawQuery( query, args );
+
+        if ( cursor.moveToFirst() ) {
+            return cursor.getLong(0);
+        } else {
+            return 0;
+        }
+    }
+
+    public long getDaytime( long subjectId ) {
+        SQLiteDatabase sdb = db.getReadableDatabase();
+
+        // Set begin to the begin of the day
+        Calendar begin = Calendar.getInstance();
+        begin.set(Calendar.HOUR, begin.getActualMinimum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMinimum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMinimum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMinimum(Calendar.MILLISECOND));
+        long msBegin = begin.getTimeInMillis();
+
+        // set end to the end of the day
+        Calendar end = Calendar.getInstance();
+        begin.set(Calendar.HOUR, begin.getActualMaximum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMaximum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMaximum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMaximum(Calendar.MILLISECOND));
+        long msEnd = end.getTimeInMillis();
+
+        String query = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
+                " FROM " + TABLE_REGISTERS +
+                " WHERE (" + REGISTERS_SUBJECTID  + " = ? AND " +
+                REGISTERS_START + " >= ? AND " +
+                REGISTERS_END + " <= ?);";;
+        String[] args = { Long.toString(subjectId), Long.toString(msBegin), Long.toString(msEnd) };
+        Cursor cursor = sdb.rawQuery( query, args );
+
+        if ( cursor.moveToFirst() ) {
+            return cursor.getLong(0);
         } else {
             return 0;
         }

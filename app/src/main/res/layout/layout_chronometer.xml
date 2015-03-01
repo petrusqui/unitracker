@@ -37,9 +37,73 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/chronometer_totalTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:text="@string/today_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:id="@+id/chronometer_todayTime"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:layout_below="@id/chronometer_todayTime"
+            android:text="@string/week_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:id="@+id/chronometer_weekTime"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chronometer_todayTime"
+            android:layout_alignParentRight="true"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:layout_below="@id/chronometer_weekTime"
+            android:text="@string/month_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:id="@+id/chronometer_mothTime"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chronometer_weekTime"
+            android:layout_alignParentRight="true"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:layout_below="@id/chronometer_mothTime"
+            android:text="@string/total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/textTimeTheme"/>
+
+        <TextView
+            android:id="@+id/chronometer_totalTime"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chronometer_mothTime"
+            android:theme="@style/textTimeTheme"/>
+    </RelativeLayout>
 
 </LinearLayout>
