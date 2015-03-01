@@ -206,6 +206,39 @@ public class DatabaseConection  {
         }
     }
 
+    public long getTotalDayTime( ) {
+        SQLiteDatabase sdb = db.getReadableDatabase();
+
+        // Set begin to the begin of the day
+        Calendar begin = Calendar.getInstance();
+        begin.set(Calendar.HOUR, begin.getActualMinimum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMinimum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMinimum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMinimum(Calendar.MILLISECOND));
+        long msBegin = begin.getTimeInMillis();
+
+        // set end to the end of the day
+        Calendar end = Calendar.getInstance();
+        begin.set(Calendar.HOUR, begin.getActualMaximum(Calendar.HOUR));
+        begin.set(Calendar.MINUTE, begin.getActualMaximum(Calendar.MINUTE));
+        begin.set(Calendar.SECOND, begin.getActualMaximum(Calendar.SECOND));
+        begin.set(Calendar.MILLISECOND, begin.getActualMaximum(Calendar.MILLISECOND));
+        long msEnd = end.getTimeInMillis();
+
+        String query = "SELECT SUM( " + REGISTERS_END  + " - " + REGISTERS_START + " ) " +
+                " FROM " + TABLE_REGISTERS +
+                " WHERE (" + REGISTERS_START + " >= ? AND " +
+                REGISTERS_END + " <= ?);";;
+        String[] args = { Long.toString(msBegin), Long.toString(msEnd) };
+        Cursor cursor = sdb.rawQuery( query, args );
+
+        if ( cursor.moveToFirst() ) {
+            return cursor.getLong(0);
+        } else {
+            return 0;
+        }
+    }
+
     /* If we provide a valid subject name return the index of the subject */
     public long longSubjectID( String subject ) {
         SQLiteDatabase sdb = db.getReadableDatabase();

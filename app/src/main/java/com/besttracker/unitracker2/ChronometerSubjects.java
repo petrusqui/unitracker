@@ -57,11 +57,11 @@ public class ChronometerSubjects extends Activity {
         monthlyTime.setText( sMonthlyTime );
         // set the weekly time
         weeklyTime = (TextView)findViewById(R.id.chronometer_weekTime);
-        String sWeeklyTime = parseLongToTime( db.getMonthTime( subjectId ));
+        String sWeeklyTime = parseLongToTime( db.getWeekTime( subjectId ));
         weeklyTime.setText( sWeeklyTime );
         // set the dayly time
         daylyTime = (TextView)findViewById(R.id.chronometer_todayTime);
-        String sDaylyTime = parseLongToTime( db.getMonthTime( subjectId ));
+        String sDaylyTime = parseLongToTime( db.getDaytime( subjectId ));
         daylyTime.setText( sDaylyTime );
 
         // we get the current time and start the chronometer
@@ -82,7 +82,7 @@ public class ChronometerSubjects extends Activity {
         });
     }
 
-    private String parseLongToTime( Long time ) {
+    public static String parseLongToTime( Long time ) {
         time = time/1000;
         int minutes = time.intValue()/60;
         int seconds = time.intValue()%60;

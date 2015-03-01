@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
 
     DatabaseConection db;
     ListView list;
+    TextView totalTime;
 
     public static final String SUBJECT_SELECTED = "subject";
 
@@ -44,6 +46,10 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
                 db.close();
             }
         });
+
+        totalTime = (TextView)findViewById(R.id.main_totalTodayTime);
+        String sTotalTime = ChronometerSubjects.parseLongToTime( db.getTotalDayTime());
+        totalTime.setText(sTotalTime);
     }
 
 
