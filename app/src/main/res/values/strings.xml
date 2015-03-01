@@ -13,4 +13,5 @@
     <string name="today_time">Today:</string>
     <string name="week_time">Week:</string>
     <string name="month_time">Month:</string>
+    <string name="edtSuject_cant_be_null">The subject field cannot be empty</string>
 </resources>

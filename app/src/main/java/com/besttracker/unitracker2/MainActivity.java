@@ -83,6 +83,8 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
 
     @Override
     public void onSaveSubjectDialog(String subject, String time) {
+        if ( time.equals("") )
+            time = "0";
         SubjectItem subjectItem = new SubjectItem(subject, Color.BLACK, Float.parseFloat(time) );
         db.saveSubject(subjectItem);
         arrayList.add( subject );

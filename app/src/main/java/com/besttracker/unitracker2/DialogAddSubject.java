@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.besttracker.unitracker2.R;
 
@@ -48,7 +49,15 @@ public class DialogAddSubject extends DialogFragment {
             public void onClick(View v) {
 
                 GetSubjectDataListener activity = (GetSubjectDataListener) getActivity();
-                activity.onSaveSubjectDialog(edtSubject.getText().toString(), edtTime.getText().toString());
+                String subject = edtSubject.getText().toString();
+                if ( subject == null || subject.equals(""))
+                    Toast.makeText(getActivity(), getString(R.string.edtSuject_cant_be_null), Toast.LENGTH_SHORT).show();
+
+                String time = edtTime.getText().toString();
+                if ( time == null )
+                    time = "";
+
+                activity.onSaveSubjectDialog(subject, time);
                 dismiss();
             }
         });
