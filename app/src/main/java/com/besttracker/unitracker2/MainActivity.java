@@ -41,6 +41,7 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
                 String subject = (String)parent.getItemAtPosition(position);
                 intent.putExtra( SUBJECT_SELECTED, subject );
                 startActivity(intent);
+                db.close();
             }
         });
     }

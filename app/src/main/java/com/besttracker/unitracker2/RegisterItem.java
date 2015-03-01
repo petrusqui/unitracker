@@ -1,25 +1,27 @@
 package com.besttracker.unitracker2;
 
+import java.util.Calendar;
+
 /**
  * Created by psinc_000 on 01/03/2015.
  */
 public class RegisterItem {
 
-    private String startTime;
-    private String endTime;
+    private Calendar startTime;
+    private Calendar endTime;
     private long subjectId;
 
-    RegisterItem( String start, String end, long subject ) {
+    RegisterItem( Calendar start, Calendar end, long subject ) {
         startTime = start;
         endTime = end;
         subjectId = subject;
     }
 
-    String getStartTime() {
+    Calendar getStartTime() {
         return startTime;
     }
 
-    String getEndTime() {
+    Calendar getEndTime() {
         return endTime;
     }
 

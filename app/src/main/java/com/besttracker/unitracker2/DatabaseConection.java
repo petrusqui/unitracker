@@ -6,10 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.besttracker.unitracker2.SubjectItem;
-
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * Created by psinc_000 on 28/02/2015.
  */
@@ -68,8 +64,8 @@ public class DatabaseConection  {
         SQLiteDatabase sdb = db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put( REGISTERS_START, item.getStartTime());
-        values.put( REGISTERS_END, item.getEndTime());
+        values.put( REGISTERS_START, item.getStartTime().toString());
+        values.put( REGISTERS_END, item.getEndTime().toString());
         values.put( REGISTERS_ID, item.getSubjectId());
 
         long newRowId = sdb.insert(
@@ -79,6 +75,23 @@ public class DatabaseConection  {
         );
 
         return newRowId;
+    }
+
+    /* If we provide a valid subject name return the index of the subject */
+    public long longSubjectID( String subject ) {
+        SQLiteDatabase sdb = db.getReadableDatabase();
+        String[] columns = {SUBJECT_ID};
+        String where = SUBJECT_NAME +" = ?";
+        String[] whereArgs = {subject};
+        String limit = "1";
+        Cursor cursor = sdb.query(false, TABLE_SUBJECT, columns, where, whereArgs, null, null, null, limit );
+
+        cursor.moveToFirst();
+        return cursor.getLong( 0 );
+    }
+
+    public void close() {
+        db.close();
     }
 
     class DatabaseHelper extends SQLiteOpenHelper {
@@ -97,8 +110,8 @@ public class DatabaseConection  {
         private static final String SQL_CREATION_REGISTERS =
                 " CREATE TABLE " + TABLE_REGISTERS + " ( " +
                 REGISTERS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                REGISTERS_START + " INT UNIQUE NOT NULL, " +
-                REGISTERS_END + " INT NOT NULL, " +
+                REGISTERS_START + " INTEGER UNIQUE NOT NULL, " +
+                REGISTERS_END + " INTEGER NOT NULL, " +
                 REGISTERS_SUBJECTID + " INTEGER NOT NULL, " +
                 " FOREIGN KEY (" + REGISTERS_SUBJECTID + ") " + " REFERENCES " + TABLE_SUBJECT + "(" +SUBJECT_ID + ")"
                 + ");";
