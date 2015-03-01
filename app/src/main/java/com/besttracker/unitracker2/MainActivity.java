@@ -23,6 +23,8 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
     DatabaseConection db;
     ListView list;
     TextView totalTime;
+    ArrayAdapter<String> arrayAdapter;
+    ArrayList<String> arrayList;
 
     public static final String SUBJECT_SELECTED = "subject";
 
@@ -83,10 +85,12 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
     public void onSaveSubjectDialog(String subject, String time) {
         SubjectItem subjectItem = new SubjectItem(subject, Color.BLACK, Float.parseFloat(time) );
         db.saveSubject(subjectItem);
+        arrayList.add( subject );
+        arrayAdapter.notifyDataSetChanged();
     }
 
     public void fillListView() {
-        ArrayList<String> arrayList = new ArrayList<String>();
+       arrayList = new ArrayList<String>();
         Cursor cursor = db.getAllSubjects();
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
@@ -95,7 +99,7 @@ public class MainActivity extends Activity implements DialogAddSubject.GetSubjec
             cursor.moveToNext();
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+        arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_expandable_list_item_1,
                 arrayList
