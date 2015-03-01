@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
 
 /**
  * Created by psinc_000 on 01/03/2015.
@@ -14,6 +15,7 @@ import android.widget.Chronometer;
 public class ChronometerSubjects extends Activity {
 
     Chronometer chronometer;
+    TextView txtVSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,10 @@ public class ChronometerSubjects extends Activity {
 
         Intent intent = getIntent();
         String subject = intent.getStringExtra(MainActivity.SUBJECT_SELECTED);
+
+        // Set the title
+        txtVSubject = (TextView)findViewById(R.id.chronometer_subject);
+        txtVSubject.setText( subject );
 
         chronometer = (Chronometer)findViewById(R.id.chronometer);
         chronometer.setBase(SystemClock.elapsedRealtime());
